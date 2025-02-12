@@ -2,20 +2,20 @@ pipeline {
     agent {
         docker {
             image 'openjdk:11'
-            args '--user root -v /var/run/docker.sock:/var/run/docker.sock'  // Mount Docker socket
+            args '--user root -v /Users/abhishekherbertsamuel/.docker/run/docker.sock:/var/run/docker.sock'
         }
     }
     environment {
-        APP_ENV = "development"  // Change to "production" for production builds
+        APP_ENV = "development"
         APP_VERSION = "1.0.0"
     }
     stages {
         stage("Verify Docker Access") {
             steps {
                 script {
-                    sh 'whoami'  // Check user running inside container
-                    sh 'docker --version'  // Check if Docker is accessible
-                    sh 'ls -lah /var/run/docker.sock'  // Verify Docker socket
+                    sh 'whoami'  // Check user inside container
+                    sh 'docker --version'  // Verify Docker access
+                    sh 'ls -lah /var/run/docker.sock'  // Ensure the socket is mounted
                 }
             }
         }
@@ -62,5 +62,3 @@ pipeline {
         }
     }
 }
-
-
