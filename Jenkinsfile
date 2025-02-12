@@ -9,6 +9,7 @@ pipeline {
     environment {
         JAVA_HOME = "/Library/Java/JavaVirtualMachines/jdk-18.0.2.jdk/Contents/Home"
         PATH = "${JAVA_HOME}/bin:${env.PATH}"
+        DOCKER_PATH = "/opt/homebrew/bin/docker"
         APP_ENV = "development"  // Change to "production" for production builds
         APP_VERSION = "1.0.0"
     }
@@ -28,6 +29,15 @@ pipeline {
             steps {
                 sh "java -version"
                 sh "javac -version"
+            }
+        }
+        stage("Verify Docker Access") {
+            steps {
+                script {
+                    sh 'whoami'
+                    sh '$DOCKER_PATH --version'
+                    sh 'ls -lah /var/run/docker.sock'
+                }
             }
         }
         stage("Parallel Compilation") {
@@ -60,4 +70,5 @@ pipeline {
         }
     }
 }
+
 
