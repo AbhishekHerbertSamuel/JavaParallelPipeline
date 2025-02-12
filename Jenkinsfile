@@ -1,5 +1,10 @@
 pipeline {
-    agent any  // Use system-installed Java instead of Docker
+    agent {
+        docker {
+            image 'openjdk:18'
+            args '--user root'  // Run as root to avoid permission issues
+        }
+  
     environment {
         JAVA_HOME = "/Library/Java/JavaVirtualMachines/jdk-18.0.2.jdk/Contents/Home"
         PATH = "${JAVA_HOME}/bin:${env.PATH}"
