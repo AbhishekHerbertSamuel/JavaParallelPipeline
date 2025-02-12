@@ -9,7 +9,8 @@ pipeline {
     environment {
         JAVA_HOME = "/Library/Java/JavaVirtualMachines/jdk-18.0.2.jdk/Contents/Home"
         PATH = "${JAVA_HOME}/bin:${env.PATH}"
-       DOCKER_PATH = "/usr/bin/docker"
+        DOCKER_PATH = "/opt/homebrew/bin/docker"
+
 
         APP_ENV = "development"  // Change to "production" for production builds
         APP_VERSION = "1.0.0"
