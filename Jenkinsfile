@@ -2,7 +2,7 @@ pipeline {
     agent {
         docker {
             image 'openjdk:11'
-            args '--user root'  // Run as root to avoid permission issues
+            args '--user root -v /var/run/docker.sock:/var/run/docker.sock'  // Mount Docker socket
         }
     }
     environment {
@@ -62,4 +62,5 @@ pipeline {
         }
     }
 }
+
 
