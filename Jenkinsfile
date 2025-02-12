@@ -1,17 +1,8 @@
 pipeline {
-    agent {
-        docker {
-            image 'openjdk:18'
-            args '--user root'  // Run as root to avoid permission issues
-        }
-    }
-  
+    agent any  // Use system-installed Java instead of Docker
     environment {
         JAVA_HOME = "/Library/Java/JavaVirtualMachines/jdk-18.0.2.jdk/Contents/Home"
         PATH = "${JAVA_HOME}/bin:${env.PATH}"
-        DOCKER_PATH = "/opt/homebrew/bin/docker"
-
-
         APP_ENV = "development"  // Change to "production" for production builds
         APP_VERSION = "1.0.0"
     }
@@ -31,15 +22,6 @@ pipeline {
             steps {
                 sh "java -version"
                 sh "javac -version"
-            }
-        }
-        stage("Verify Docker Access") {
-            steps {
-                script {
-                    sh 'whoami'
-                    sh '$DOCKER_PATH --version'
-                    sh 'ls -lah /var/run/docker.sock'
-                }
             }
         }
         stage("Parallel Compilation") {
@@ -72,5 +54,3 @@ pipeline {
         }
     }
 }
-
-
