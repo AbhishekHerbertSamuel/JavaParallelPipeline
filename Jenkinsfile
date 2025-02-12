@@ -4,6 +4,7 @@ pipeline {
             image 'openjdk:18'
             args '--user root'  // Run as root to avoid permission issues
         }
+    }
   
     environment {
         JAVA_HOME = "/Library/Java/JavaVirtualMachines/jdk-18.0.2.jdk/Contents/Home"
