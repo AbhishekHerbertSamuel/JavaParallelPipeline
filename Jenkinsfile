@@ -1,12 +1,17 @@
 pipeline {
-    agent any  // Use system-installed Java instead of Docker
+    agent any
     environment {
-        JAVA_HOME = "/Library/Java/JavaVirtualMachines/jdk-18.0.2.jdk/Contents/Home"
+        JAVA_HOME = "/opt/java/openjdk"
         PATH = "${JAVA_HOME}/bin:${env.PATH}"
-        APP_ENV = "development"  // Change to "production" for production builds
+        APP_ENV = "development"
         APP_VERSION = "1.0.0"
     }
     stages {
+        stage("Start Docker Compose") {
+            steps {
+                sh "docker-compose up -d"
+            }
+        }
         stage("Initialize") {
             steps {
                 script {
@@ -40,10 +45,9 @@ pipeline {
                 }
             }
         }
-        stage("Archive Artifacts") {
+        stage("Stop Docker Compose") {
             steps {
-                archiveArtifacts artifacts: "build/*.class", fingerprint: true
-                echo "✅ Compiled files archived."
+                sh "docker-compose down"
             }
         }
     }
@@ -54,3 +58,4 @@ pipeline {
         }
     }
 }
+
