@@ -1,7 +1,7 @@
 pipeline {
     agent any
     environment {
-        JAVA_HOME = "/opt/java/openjdk"
+        JAVA_HOME = "/usr/local/openjdk-18"
         PATH = "${JAVA_HOME}/bin:${env.PATH}"
         APP_ENV = "development"
         APP_VERSION = "1.0.0"
