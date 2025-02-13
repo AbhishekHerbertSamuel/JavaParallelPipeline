@@ -10,6 +10,7 @@ pipeline {
         stage("Start Docker Compose") {
             steps {
                 sh "docker-compose up -d"
+                sh "docker-compose ps" // Check running containers
             }
         }
         stage("Initialize") {
@@ -34,19 +35,28 @@ pipeline {
                 stage("Task 1 Compilation") {
                     steps {
                         echo "Compiling Task 1..."
+                        sh "mkdir -p build"
                         sh "javac -d build/ src/Task1.java"
                     }
                 }
                 stage("Task 2 Compilation") {
                     steps {
                         echo "Compiling Task 2..."
+                        sh "mkdir -p build"
                         sh "javac -d build/ src/Task2.java"
                     }
                 }
             }
         }
+        stage("Archive Artifacts") {
+            steps {
+                archiveArtifacts artifacts: "build/*.class", fingerprint: true
+                echo "✅ Compiled files archived."
+            }
+        }
         stage("Stop Docker Compose") {
             steps {
+                sh "docker-compose logs" // Capture logs before stopping
                 sh "docker-compose down"
             }
         }
@@ -58,4 +68,5 @@ pipeline {
         }
     }
 }
+
 
