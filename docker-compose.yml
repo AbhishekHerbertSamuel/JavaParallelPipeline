@@ -1,0 +1,29 @@
+version: "3.8"
+
+services:
+  java_app:
+    image: openjdk:18
+    container_name: java_app
+    working_dir: /app
+    volumes:
+      - .:/app
+    environment:
+      - JAVA_HOME=/usr/local/openjdk-18
+      - PATH=/usr/local/openjdk-18/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
+      - APP_ENV=development
+      - APP_VERSION=1.0.0
+    command: tail -f /dev/null  # Keeps the container running
+
+  jenkins:
+    image: jenkins/jenkins:lts
+    container_name: jenkins
+    restart: unless-stopped
+    ports:
+      - "9000:8080"
+      - "50000:50000"
+    volumes:
+      - /var/jenkins_home:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - JAVA_OPTS=-Djenkins.install.runSetupWizard=false
+      - JENKINS_OPTS=--httpPort=8080
